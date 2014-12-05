@@ -4,7 +4,9 @@ import re
 import sys
 from urllib.error import URLError, HTTPError
 from urllib.request import urlopen
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
+
+import lxml.html
 
 
 class DictLike(dict):
@@ -65,7 +67,7 @@ def check(url):
         sitemap_urls = []
     else:
         sitemap_urls = re.findall(r'^sitemap:\s*(.*)$',
-                                  robots_txt.body, re.IGNORECASE | re.MULTILINE)
+                                  robots_txt.text_body, re.IGNORECASE | re.MULTILINE)
 
     fuzzy_sitemap_urls = [
         top_url + 'sitemap.xml',
@@ -76,12 +78,26 @@ def check(url):
         if fuzzy_sitemap_url not in sitemap_urls:
             fuzzy_sitemaps.append(try_fetch(fuzzy_sitemap_url))
 
+    root = lxml.html.fromstring(page.bytes_body)
+    terms_links = root.xpath('//a[text()="利用規約" or text()="Terms"]/@href')
+    if len(terms_links):
+        terms_link = urljoin(page.url, terms_links[0])
+    else:
+        terms_link = None
+
+    if terms_link:
+        terms_page = try_fetch(terms_link)
+    else:
+        terms_page = None
+
     c = Compatiblity(
         page=page,
         top_page=top_page,
         robots_txt=robots_txt,
         sitemap_urls=sitemap_urls,
         fuzzy_sitemaps=fuzzy_sitemaps,
+        terms_link=terms_link,
+        terms_page=terms_page,
     )
     print(c)
 
@@ -98,7 +114,8 @@ def fetch(url):
         error=False,
         status=f.status,
         length=len(bytes_body),
-        body=text_body,
+        text_body=text_body,
+        bytes_body=bytes_body,
     )
 
 
@@ -106,6 +123,7 @@ def try_fetch(url):
     try:
         return fetch(url)
     except HTTPError as ex:
+        logger.info('HTTPError code: %s, reason: %s', ex.code, ex.reason)
         return Response(
             url=url,
             error=True,
@@ -113,6 +131,7 @@ def try_fetch(url):
             reason=ex.reason,
         )
     except URLError as ex:
+        logger.info('URLError reason: %s', ex.reason)
         return Response(
             url=url,
             error=True,
