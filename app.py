@@ -3,21 +3,29 @@ import sys
 import asyncio
 
 from aiohttp import web
+from jinja2 import Environment, FileSystemLoader
 
 from check import check
 
 
-@asyncio.coroutine
-def handle(request):
-    name = request.match_info.get('name', "Anonymous")
-    text = "Hello, " + name
-    return web.Response(body=text.encode('utf-8'))
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+env = Environment(loader=FileSystemLoader(os.path.join(BASE_DIR, 'templates')))
 
 
 @asyncio.coroutine
-def handle_check(request):
+def handle_index(request):
+    template = env.get_template('index.html')
+    return web.Response(body=template.render().encode('utf-8'))
+
+
+@asyncio.coroutine
+def handle_result(request):
     url = request.GET.get('url')
     c = yield from check(url)
+
+    template = env.get_template('result.html')
+    return web.Response(body=template.render(c=c).encode('utf-8'))
+
     text = 'Status: {0}'.format(c.page.status)
     return web.Response(body=text.encode('utf-8'))
 
@@ -25,8 +33,8 @@ def handle_check(request):
 @asyncio.coroutine
 def init(loop):
     app = web.Application(loop=loop)
-    app.router.add_route('GET', '/check', handle_check)
-    app.router.add_route('GET', '/{name}', handle)
+    app.router.add_route('GET', '/result', handle_result)
+    app.router.add_route('GET', '/', handle_index)
 
     host = '0.0.0.0'
     port = os.environ.get('PORT', 8000)
