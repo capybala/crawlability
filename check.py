@@ -2,11 +2,13 @@ import logging
 import os
 import re
 import sys
+import asyncio
 from urllib.error import URLError, HTTPError
 from urllib.request import urlopen
 from urllib.parse import urlparse, urljoin
 
 import lxml.html
+import aiohttp
 
 
 class DictLike(dict):
@@ -43,7 +45,9 @@ def setup_logger():
 
 def main():
     url = sys.argv[1]
-    check(url)
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(check(url))
 
 
 def check(url):
@@ -52,17 +56,17 @@ def check(url):
     if o.scheme not in ('http', 'https'):
         raise ValueError('Invalid url')
 
-    page = fetch(url)
+    page = yield from fetch(url)
 
     top_url = '{0.scheme}://{0.netloc}/'.format(o)
     if top_url == url:
         top_page = page
     else:
-        top_page = try_fetch(top_url)
+        top_page = yield from try_fetch(top_url)
 
     robots_url = top_url + 'robots.txt'
 
-    robots_txt = try_fetch(robots_url)
+    robots_txt = yield from try_fetch(robots_url)
     if robots_txt.error:
         sitemap_urls = []
     else:
@@ -76,7 +80,7 @@ def check(url):
     fuzzy_sitemaps = []
     for fuzzy_sitemap_url in fuzzy_sitemap_urls:
         if fuzzy_sitemap_url not in sitemap_urls:
-            fuzzy_sitemaps.append(try_fetch(fuzzy_sitemap_url))
+            fuzzy_sitemaps.append((yield from try_fetch(fuzzy_sitemap_url)))
 
     root = lxml.html.fromstring(page.bytes_body)
     terms_links = root.xpath('//a[text()="利用規約" or text()="Terms"]/@href')
@@ -86,7 +90,7 @@ def check(url):
         terms_link = None
 
     if terms_link:
-        terms_page = try_fetch(terms_link)
+        terms_page = yield from try_fetch(terms_link)
     else:
         terms_page = None
 
@@ -99,13 +103,13 @@ def check(url):
         terms_link=terms_link,
         terms_page=terms_page,
     )
-    print(c)
+    #print(c)
 
 
 def fetch(url):
     logger.info('Downloading %s', url)
-    f = urlopen(url)
-    bytes_body = f.read()
+    f = yield from aiohttp.request('GET', url)
+    bytes_body = yield from f.read()
     logger.info('Downloaded. code: %s, size: %sbytes', f.status, len(bytes_body))
     text_body = bytes_body.decode('utf-8')
     logger.debug(text_body)
