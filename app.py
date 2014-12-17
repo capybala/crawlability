@@ -9,7 +9,9 @@ from check import check
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-env = Environment(loader=FileSystemLoader(os.path.join(BASE_DIR, 'templates')))
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
 
 @asyncio.coroutine
@@ -35,6 +37,7 @@ def init(loop):
     app = web.Application(loop=loop)
     app.router.add_route('GET', '/result', handle_result)
     app.router.add_route('GET', '/', handle_index)
+    app.router.add_static('/static', STATIC_DIR)
 
     host = '0.0.0.0'
     port = os.environ.get('PORT', 8000)

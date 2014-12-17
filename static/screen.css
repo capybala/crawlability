@@ -1,0 +1,15 @@
+body {
+	background-color: #eee;
+}
+
+.top input {
+	font-size: 30px;
+}
+
+.top input[name="url"] {
+	width: 80%;
+}
+
+.top input[type="submit"] {
+	-webkit-appearance: button;
+}
