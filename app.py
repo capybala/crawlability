@@ -1,4 +1,7 @@
+import os
+import sys
 import asyncio
+
 from aiohttp import web
 
 from check import check
@@ -25,11 +28,15 @@ def init(loop):
     app.router.add_route('GET', '/check', handle_check)
     app.router.add_route('GET', '/{name}', handle)
 
-    srv = yield from loop.create_server(app.make_handler(),
-                                        '127.0.0.1', 8000)
-    print("Server started at http://127.0.0.1:8000")
+    host = '0.0.0.0'
+    port = os.environ.get('PORT', 8000)
+    srv = yield from loop.create_server(app.make_handler(), host, port)
+    print("Server started at http://{0}:{1}".format(host, port))
     return srv
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(init(loop))
-loop.run_forever()
+try:
+    loop.run_forever()
+except KeyboardInterrupt:
+    print('Interrupted', file=sys.stderr)
