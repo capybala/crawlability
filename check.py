@@ -32,7 +32,7 @@ class Response(DictLike):
     pass
 
 
-class Compatiblity(DictLike):
+class Crawlability(DictLike):
     pass
 
 
@@ -59,7 +59,7 @@ def check(url):
 
     top_url = '{0.scheme}://{0.netloc}/'.format(o)
 
-    c = Compatiblity()
+    c = Crawlability()
     yield from asyncio.wait([
         get_page(c, url),
         get_top_page(c, top_url),
