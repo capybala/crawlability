@@ -156,7 +156,8 @@ def try_fetch(url):
             reason=ex.reason,
         )
 
+setup_logger()
+logger = logging.getLogger(__name__)
+
 if __name__ == '__main__':
-    setup_logger()
-    logger = logging.getLogger(__name__)
     main()
