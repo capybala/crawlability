@@ -47,7 +47,8 @@ def main():
     url = sys.argv[1]
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(check(url))
+    c = loop.run_until_complete(check(url))
+    #print(c)
 
 
 def check(url):
@@ -56,31 +57,21 @@ def check(url):
     if o.scheme not in ('http', 'https'):
         raise ValueError('Invalid url')
 
-    page = yield from fetch(url)
-
     top_url = '{0.scheme}://{0.netloc}/'.format(o)
-    if top_url == url:
-        top_page = page
-    else:
-        top_page = yield from try_fetch(top_url)
 
-    robots_url = top_url + 'robots.txt'
+    c = Compatiblity()
+    yield from asyncio.wait([
+        get_page(c, url),
+        get_top_page(c, top_url),
+        get_robots_txt(c, top_url),
+        get_fuzzy_sitemaps(c, top_url),
+    ])
 
-    robots_txt = yield from try_fetch(robots_url)
-    if robots_txt.error:
-        sitemap_urls = []
-    else:
-        sitemap_urls = re.findall(r'^sitemap:\s*(.*)$',
-                                  robots_txt.text_body, re.IGNORECASE | re.MULTILINE)
+    return c
 
-    fuzzy_sitemap_urls = [
-        top_url + 'sitemap.xml',
-        top_url + 'sitemaps.xml',
-    ]
-    fuzzy_sitemaps = []
-    for fuzzy_sitemap_url in fuzzy_sitemap_urls:
-        if fuzzy_sitemap_url not in sitemap_urls:
-            fuzzy_sitemaps.append((yield from try_fetch(fuzzy_sitemap_url)))
+
+def get_page(c, url):
+    page = yield from fetch(url)
 
     root = lxml.html.fromstring(page.bytes_body)
     terms_links = root.xpath('//a[text()="利用規約" or text()="Terms"]/@href')
@@ -94,16 +85,39 @@ def check(url):
     else:
         terms_page = None
 
-    c = Compatiblity(
-        page=page,
-        top_page=top_page,
-        robots_txt=robots_txt,
-        sitemap_urls=sitemap_urls,
-        fuzzy_sitemaps=fuzzy_sitemaps,
-        terms_link=terms_link,
-        terms_page=terms_page,
-    )
-    #print(c)
+    c.page = page
+    c.terms_link = terms_link
+    c.terms_page = terms_page
+
+
+def get_top_page(c, top_url):
+    c.top_page = yield from try_fetch(top_url)
+
+
+def get_robots_txt(c, top_url):
+    robots_url = top_url + 'robots.txt'
+
+    robots_txt = yield from try_fetch(robots_url)
+    if robots_txt.error:
+        sitemap_urls = []
+    else:
+        sitemap_urls = re.findall(r'^sitemap:\s*(.*)$',
+                                  robots_txt.text_body, re.IGNORECASE | re.MULTILINE)
+
+    c.robots_txt = robots_txt
+    c.sitemap_urls = sitemap_urls
+
+
+def get_fuzzy_sitemaps(c, top_url):
+    fuzzy_sitemap_urls = [
+        top_url + 'sitemap.xml',
+        top_url + 'sitemaps.xml',
+    ]
+    fuzzy_sitemaps = []
+    for fuzzy_sitemap_url in fuzzy_sitemap_urls:
+        fuzzy_sitemaps.append((yield from try_fetch(fuzzy_sitemap_url)))
+
+    c.fuzzy_sitemaps = fuzzy_sitemaps
 
 
 def fetch(url):
