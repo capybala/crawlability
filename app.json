@@ -2,5 +2,8 @@
   "name": "Crawlability",
   "description": "Check crawlability of web sites.",
   "website": "https://crawlability.capybala.com/",
-  "repository": "https://github.com/orangain/crawlability"
+  "repository": "https://github.com/orangain/crawlability",
+  "addons": [
+    "memcachier:dev"
+  ]
 }

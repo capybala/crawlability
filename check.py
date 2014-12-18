@@ -37,7 +37,19 @@ class Response(DictLike):
 
 
 class Crawlability(DictLike):
-    pass
+
+    def to_cacheable_dict(self):
+        d = dict(self)
+        for page in [d.page, d.top_page, d.terms_page] + d.fuzzy_sitemaps:
+            if not page:
+                continue
+
+            del page.text_body
+            del page.bytes_body
+
+        del d.robots_txt.bytes_body
+
+        return d
 
 
 def setup_logger():

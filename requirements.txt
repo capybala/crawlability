@@ -1,3 +1,4 @@
 lxml
 aiohttp
 Jinja2
+pylibmc
