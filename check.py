@@ -124,7 +124,8 @@ def fetch(url):
     logger.info('Downloading %s', url)
     f = yield from aiohttp.request('GET', url)
     bytes_body = yield from f.read()
-    logger.info('Downloaded. code: %s, size: %sbytes', f.status, len(bytes_body))
+    logger.info('Downloaded. code: %s, type: %s, size: %sbytes',
+                f.status, f.headers.get('Content-Type'), len(bytes_body))
     text_body = bytes_body.decode('utf-8')
     logger.debug(text_body)
     return Response(
@@ -134,6 +135,7 @@ def fetch(url):
         length=len(bytes_body),
         text_body=text_body,
         bytes_body=bytes_body,
+        content_type=f.headers.get('Content-Type'),
     )
 
 

@@ -6,32 +6,26 @@
 <ul>
 	<li>URL: <a href="{{ c.page.url }}">{{ c.page.url }}</a>
 	<li>Status: {{ c.page.status }}</li>
-	<li>Size: {{ c.page.length }} bytes</li>
+	<li>Content-Type: {{ c.page.content_type }}</li>
+	<li>Size: {{ c.page.length|filesizeformat }}</li>
 </ul>
 
 <h2>Top Page</h2>
 <ul>
 	<li>URL: <a href="{{ c.top_page.url }}">{{ c.top_page.url }}</a>
 	<li>Status: {{ c.top_page.status }}</li>
-	<li>Size: {{ c.top_page.length }} bytes</li>
+	<li>Content-Type: {{ c.top_page.content_type }}</li>
+	<li>Size: {{ c.top_page.length|filesizeformat }}</li>
 </ul>
 
 <h2>robots.txt</h2>
 <ul>
 	<li>URL: <a href="{{ c.robots_txt.url }}">{{ c.robots_txt.url }}</a>
 	<li>Status: {{ c.robots_txt.status }}</li>
-	<li>Size: {{ c.robots_txt.length }} bytes</li>
+	<li>Content-Type: {{ c.robots_txt.content_type }}</li>
+	<li>Size: {{ c.robots_txt.length|filesizeformat }}</li>
 	<li>Content:
-	<pre><code>{{ c.robots_txt.text_body }}</code></pre>
-	</li>
-	<li>Sitemaps:
-		<ul>
-			{% for sitemap_url in c.sitemap_urls %}
-			<li><a href="{{ sitemap_url }}">{{ sitemap_url }}</a></li>
-			{% else %}
-			<li>No sitemap found in robots.txt</li>
-			{% endfor %}
-		</ul>
+		<pre><code>{{ c.robots_txt.text_body|urlize(nofollow=True) }}</code></pre>
 	</li>
 </ul>
 
@@ -42,7 +36,8 @@
 	<ul>
 		<li>URL: <a href="{{ sitemap.url }}">{{ sitemap.url }}</a>
 		<li>Status: {{ sitemap.status }}</li>
-		<li>Size: {{ sitemap.length }} bytes</li>
+		<li>Content-Type: {{ sitemap.content_type }}</li>
+		<li>Size: {{ sitemap.length|filesizeformat }}</li>
 	</ul>
 	</li>
 	{% endfor %}
@@ -53,7 +48,8 @@
 	{% if c.terms_page %}
 	<li>URL: <a href="{{ c.terms_page.url }}">{{ c.terms_page.url }}</a>
 	<li>Status: {{ c.terms_page.status }}</li>
-	<li>Size: {{ c.terms_page.length }} bytes</li>
+	<li>Content-Type: {{ c.terms_page.content_type }}</li>
+	<li>Size: {{ c.terms_page.length|filesizeformat }}</li>
 	{% else %}
 	<li>No terms found</li>
 	{% endif %}
