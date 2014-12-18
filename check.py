@@ -89,17 +89,17 @@ def check(url):
 def get_page(c, url):
     page = yield from fetch(url)
 
-    root = lxml.html.fromstring(page.bytes_body)
-    terms_links = root.xpath('//a[text()="利用規約" or text()="Terms"]/@href')
-    if len(terms_links):
-        terms_link = urljoin(page.url, terms_links[0])
-    else:
-        terms_link = None
+    terms_link = None
+    terms_page = None
 
-    if terms_link:
-        terms_page = yield from try_fetch(terms_link)
-    else:
-        terms_page = None
+    if page.ok:
+        root = lxml.html.fromstring(page.bytes_body)
+        terms_links = root.xpath('//a[text()="利用規約" or text()="Terms"]/@href')
+        if len(terms_links):
+            terms_link = urljoin(page.url, terms_links[0])
+
+        if terms_link:
+            terms_page = yield from try_fetch(terms_link)
 
     c.page = page
     c.terms_link = terms_link
@@ -141,12 +141,12 @@ def fetch(url):
 
     headers = {'User-Agent': USER_AGENT}
     begin = datetime.now(timezone.utc)
-    f = yield from aiohttp.request('GET', url, headers=headers)
+    f = yield from aiohttp.request('GET', url, headers=headers, allow_redirects=False)
     bytes_body = yield from f.read()
     end = datetime.now(timezone.utc)
     elapsed_ms = (end - begin).total_seconds() * 1000
 
-    content_type = f.headers.get('Content-Type')
+    content_type = f.headers.get('Content-Type', '')
 
     logger.info('Downloaded. code: %s, type: %s, size: %sbytes, in %s milliseconds',
                 f.status, content_type, len(bytes_body), elapsed_ms)
