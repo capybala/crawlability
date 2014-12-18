@@ -21,6 +21,9 @@
 	<li>URL: <a href="{{ c.robots_txt.url }}">{{ c.robots_txt.url }}</a>
 	<li>Status: {{ c.robots_txt.status }}</li>
 	<li>Size: {{ c.robots_txt.length }} bytes</li>
+	<li>Content:
+	<pre><code>{{ c.robots_txt.text_body }}</code></pre>
+	</li>
 	<li>Sitemaps:
 		<ul>
 			{% for sitemap_url in c.sitemap_urls %}
