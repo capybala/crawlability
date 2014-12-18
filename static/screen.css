@@ -18,7 +18,7 @@ header h1{
 
 /*section*/
 section {
-	min-height: 300px;
+	min-height: 500px;
 	padding: 100px 0;
 	text-align: center;
 	background-image: url(images/header.jpg);
@@ -32,7 +32,6 @@ section input {
 	padding: 20px 10px;
 	font-size: 30px;
 	border-radius: 10px;
-	box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1); 
 }
 
 section input[name="url"] {
@@ -45,6 +44,7 @@ section input[type="submit"] {
 	-webkit-appearance: button;
 	background: #66b8bc;
 	color: #ffffff;
+	border: 2px solid #66b8bc ;
 }
 /*footer*/
 footer{
