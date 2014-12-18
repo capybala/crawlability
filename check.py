@@ -12,6 +12,7 @@ import lxml.html
 import aiohttp
 
 USER_AGENT = 'crawlability-bot (+http://crawlability.capybala.com/)'
+TITLE_RE = re.compile(r'<title>\s*(.*?)\s*</title>', re.DOTALL | re.IGNORECASE)
 
 
 class DictLike(dict):
@@ -133,10 +134,19 @@ def fetch(url):
     end = datetime.now(timezone.utc)
     elapsed_ms = (end - begin).total_seconds() * 1000
 
+    content_type = f.headers.get('Content-Type')
+
     logger.info('Downloaded. code: %s, type: %s, size: %sbytes, in %s milliseconds',
-                f.status, f.headers.get('Content-Type'), len(bytes_body), elapsed_ms)
+                f.status, content_type, len(bytes_body), elapsed_ms)
     text_body = bytes_body.decode('utf-8')
     logger.debug(text_body)
+
+    title = ''
+    if 'html' in content_type.lower():
+        m = TITLE_RE.search(text_body)
+        if m:
+            title = m.group(1)
+
     return Response(
         url=url,
         user_agent=USER_AGENT,
@@ -145,10 +155,11 @@ def fetch(url):
         length=len(bytes_body),
         text_body=text_body,
         bytes_body=bytes_body,
-        content_type=f.headers.get('Content-Type'),
+        content_type=content_type,
         ok=(200 <= f.status < 300),
         started_at=begin,
         elapsed_ms=elapsed_ms,
+        title=title,
     )
 
 
