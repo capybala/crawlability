@@ -1,5 +1,7 @@
 {% extends "_layout.html" %}
 
+{% block title %}Crawlability of {{ c.page.url }}{% endblock %}
+
 {% macro render_page_items(page) %}
 	<li>URL: <a href="{{ page.url }}" rel="nofollow">{{ page.url }}</a>
 	<li>Status: <span class="status {% if page.ok %}ok{% endif %}">{{ page.status }}</span></li>
@@ -10,6 +12,8 @@
 {% endmacro %}
 
 {% block content %}
+
+<h1>Crawlability of {{ c.page.url }}</h1>
 
 <h2>Page</h2>
 <ul>
