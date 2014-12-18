@@ -17,7 +17,7 @@ env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 @asyncio.coroutine
 def handle_index(request):
     template = env.get_template('index.html')
-    return web.Response(body=template.render().encode('utf-8'))
+    return web.Response(body=template.render().encode('utf-8'), content_type='text/html; charset=utf-8')
 
 
 @asyncio.coroutine
@@ -26,15 +26,12 @@ def handle_result(request):
 
     bytes_url = url.encode('utf-8')
     if len(bytes_url) > 250:
-        return web.Response(status=400, body='url parameter is too long')
+        return web.Response(status=400, body='url parameter is too long', content_type='text/plain; charset=utf-8')
 
     c = yield from check(url)
 
     template = env.get_template('result.html')
-    return web.Response(body=template.render(c=c).encode('utf-8'))
-
-    text = 'Status: {0}'.format(c.page.status)
-    return web.Response(body=text.encode('utf-8'), content_type='text/html; charset=utf-8')
+    return web.Response(body=template.render(c=c).encode('utf-8'), content_type='text/html; charset=utf-8')
 
 
 @asyncio.coroutine
