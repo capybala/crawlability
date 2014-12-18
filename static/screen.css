@@ -18,7 +18,7 @@ header h1{
 
 /*section*/
 section {
-	min-height: 500px;
+	min-height: 400px;
 	padding: 100px 0;
 	text-align: center;
 	background-image: url(images/header.jpg);
