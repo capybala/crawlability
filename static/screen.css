@@ -66,9 +66,19 @@ section {
 }
 
 #result .info{
+	margin: 40px;
 	padding:20px;
-	background-color: rgba(255,255,255,0.8);
+	background-color: rgba(255,255,255,0.5);
 	color: #66b8bc;
+}
+
+#result h2{
+	margin: 20px 0;
+	padding: 20px;
+	text-align: center;
+	background-color: rgba(255,255,255,0.5);
+	font-family: 'Quicksand', sans-serif;
+	color: #666;
 }
 
 /*footer*/
