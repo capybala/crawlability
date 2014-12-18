@@ -1,7 +1,6 @@
 import os
 import sys
 import asyncio
-import json
 
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
@@ -33,20 +32,14 @@ def _get_from_cache(bytes_url):
     if CACHE_DISABLED:
         return None
 
-    value = mc.get(bytes_url)
-    if value is None:
-        return None
-
-    d = json.loads(value)
-    c = Crawlability(**d)
-    return c
+    return mc.get(bytes_url)
 
 
 def _store_into_cache(bytes_url, c):
     if CACHE_DISABLED:
         return
 
-    mc.set(bytes_url, json.dumps(c.to_cacheable_dict()), time=CACHE_TIMEOUT_SECONDS)
+    mc.set(bytes_url, c, time=CACHE_TIMEOUT_SECONDS)
 
 
 @asyncio.coroutine
