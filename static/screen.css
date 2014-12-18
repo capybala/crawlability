@@ -21,7 +21,7 @@ section {
 	min-height:400px;
 	padding: 100px 0;
 	text-align: center;
-	background-url: url(images/header.jpg);
+	background-image: url(images/header.jpg);
 	background-repeat: repeat-x;
 	background-position:  top center;
 	background-size: 50% 50%;
