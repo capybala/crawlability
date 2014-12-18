@@ -1,5 +1,59 @@
 {% extends "_layout.html" %}
 
 {% block content %}
-Status: {{ c.page.status }}!
+
+<h2>Page</h2>
+<ul>
+	<li>URL: <a href="{{ c.page.url }}">{{ c.page.url }}</a>
+	<li>Status: {{ c.page.status }}</li>
+	<li>Size: {{ c.page.length }} bytes</li>
+</ul>
+
+<h2>Top Page</h2>
+<ul>
+	<li>URL: <a href="{{ c.top_page.url }}">{{ c.top_page.url }}</a>
+	<li>Status: {{ c.top_page.status }}</li>
+	<li>Size: {{ c.top_page.length }} bytes</li>
+</ul>
+
+<h2>robots.txt</h2>
+<ul>
+	<li>URL: <a href="{{ c.robots_txt.url }}">{{ c.robots_txt.url }}</a>
+	<li>Status: {{ c.robots_txt.status }}</li>
+	<li>Size: {{ c.robots_txt.length }} bytes</li>
+	<li>Sitemaps:
+		<ul>
+			{% for sitemap_url in c.sitemap_urls %}
+			<li><a href="{{ sitemap_url }}">{{ sitemap_url }}</a></li>
+			{% else %}
+			<li>No sitemap found in robots.txt</li>
+			{% endfor %}
+		</ul>
+	</li>
+</ul>
+
+<h2>Fuzzy Sitemaps</h2>
+<ul>
+	{% for sitemap in c.fuzzy_sitemaps %}
+	<li>
+	<ul>
+		<li>URL: <a href="{{ sitemap.url }}">{{ sitemap.url }}</a>
+		<li>Status: {{ sitemap.status }}</li>
+		<li>Size: {{ sitemap.length }} bytes</li>
+	</ul>
+	</li>
+	{% endfor %}
+</ul>
+
+<h2>Terms</h2>
+<ul>
+	{% if c.terms_page %}
+	<li>URL: <a href="{{ c.terms_page.url }}">{{ c.terms_page.url }}</a>
+	<li>Status: {{ c.terms_page.status }}</li>
+	<li>Size: {{ c.terms_page.length }} bytes</li>
+	{% else %}
+	<li>No terms found</li>
+	{% endif %}
+</ul>
+
 {% endblock %}
