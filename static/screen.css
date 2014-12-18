@@ -40,7 +40,7 @@ section {
 	width: 80%;
 	max-width:500px;
 	color: #333;
-	border: 1px solid #ccc;
+	border: 2px solid #ccc;
 }
 
 #top input[name="url"]:hover {
@@ -51,6 +51,7 @@ section {
 	-webkit-appearance: button;
 	background: #66b8bc;
 	color: #ffffff;
+	border: none;
 }
 
 /* result.html */
