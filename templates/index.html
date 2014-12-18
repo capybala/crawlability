@@ -1,16 +1,7 @@
 {% extends "_layout.html" %}
 
 {% block content %}
-<header>
-	<h1>Crawlability</h1>
-	<p>Check the crawlability of websites</p>
-</header>
-<section>
 	<form method="GET" action="/result">
 		<input type="url" name="url" value="http://www.yahoo.com/" required> <input type="submit" value="Check">
 	</form>
-</section>
-<footer>
-	Copyright 2014 &copy; <a href="http://capybala.com">capybala.com</a> All Rights Reserved.
-</footer>
 {% endblock %}
