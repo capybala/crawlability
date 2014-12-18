@@ -72,18 +72,19 @@ section {
 	color: #66b8bc;
 }
 
-#result h2{
+#result h3{
 	margin: 20px 0;
 	padding: 20px;
 	text-align: center;
 	background-color: rgba(255,255,255,0.5);
 	font-family: 'Quicksand', sans-serif;
-	color: #666;
+	color: #666!important;
+	font-weight: normal;
 }
 #result pre{
 	margin: 20px 0;
 	padding: 30px;
-	background-color: rgba(100,100,100,0.5);
+	background-color: rgba(10,10,10,0.5);
 }
 
 #result .ok{
