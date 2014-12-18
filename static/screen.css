@@ -1,25 +1,31 @@
 body {
-	background-color: #eee;
+	margin: 0;
+	padding: 0;
 }
 /*header*/
 header{
+	padding: 50px 0 20x;
 	background: #ffffff;
-	font-family: 'Quicksand', sans-serif;
-	@include box-shadow(rgba(0, 0, 0, .15) 0 0 2px);
+	box-shadow(rgba(0, 0, 0, .15) 0 0 2px);
 	text-align:center;
 }
 
 header h1{
+	font-family: 'Quicksand', sans-serif;
 	font-size: 20px;
 }
 
 /*section*/
+section {
+	background: url(images/header.jpg) no-repeat top center;
+}
+
 section input {
 	margin-right: 5px;
 	padding: 5px;
 	font-size: 30px;
 	border-radius: 3px;
-	@include box-shadow(rgba(0, 0, 0, .15) 0 0 2px);
+	box-shadow(rgba(0, 0, 0, .15) 0 0 2px);
 }
 
 section input[name="url"] {
@@ -33,4 +39,9 @@ section input[type="submit"] {
 	color: #ffffff;
 }
 /*footer*/
-footer{}
+footer{
+	padding: 50px 0;
+	background: #333;
+	color: #fff;
+	text-align:center;
+}
