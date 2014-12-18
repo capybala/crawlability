@@ -4,6 +4,10 @@ body {
 }
 a{
 	color: #ff7d7b;
+	text-decoration: none;
+}
+a :hover{
+	text-decoration: underline;
 }
 
 /*header*/
@@ -61,8 +65,7 @@ section {
 
 /* result.html */
 #result{
-	padding: 50px 0;
-	text-align:center;
+	padding: 100px 0;
 }
 
 #result article ul{
@@ -76,6 +79,7 @@ section {
 	padding:20px;
 	background-color: rgba(255,255,255,0.5);
 	color: #66b8bc;
+	text-align:center;
 }
 
 #result h3{
