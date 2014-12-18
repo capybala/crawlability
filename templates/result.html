@@ -16,7 +16,7 @@
 
 <h1>Crawlability of {{ c.page.url }}</h1>
 
-<p>Checked at {{ c.page.started_at.strftime('%Y-%m-%d %H:%M:%S %Z') }}</p>
+<p>Checked at {{ c.page.started_at.strftime('%Y-%m-%d %H:%M:%S %Z') }}, by User-Agent: {{ c.page.user_agent }}</p>
 
 <h2>Page</h2>
 <ul>

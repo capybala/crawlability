@@ -11,6 +11,8 @@ from urllib.parse import urlparse, urljoin
 import lxml.html
 import aiohttp
 
+USER_AGENT = 'crawlability-bot (+http://crawlability.capybala.com/)'
+
 
 class DictLike(dict):
     def __getattr__(self, name):
@@ -124,8 +126,9 @@ def get_fuzzy_sitemaps(c, top_url):
 def fetch(url):
     logger.info('Downloading %s', url)
 
+    headers = {'User-Agent': USER_AGENT}
     begin = datetime.now(timezone.utc)
-    f = yield from aiohttp.request('GET', url)
+    f = yield from aiohttp.request('GET', url, headers=headers)
     bytes_body = yield from f.read()
     end = datetime.now(timezone.utc)
     elapsed_ms = (end - begin).total_seconds() * 1000
@@ -136,6 +139,7 @@ def fetch(url):
     logger.debug(text_body)
     return Response(
         url=url,
+        user_agent=USER_AGENT,
         error=False,
         status=f.status,
         length=len(bytes_body),
