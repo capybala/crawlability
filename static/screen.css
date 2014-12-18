@@ -26,30 +26,38 @@ section {
 	background-position:  top center;
 	background-size: 50% 50%;
 }
-
-section input {
+/*top*/
+#top input {
 	margin-right: 10px;
 	padding: 20px 10px;
 	font-size: 30px;
 	border-radius: 10px;
 }
 
-section input[name="url"] {
+#top input[name="url"] {
 	width: 80%;
 	max-width:500px;
 	color: #333;
 	border: 1px solid #ccc;
 }
 
-section input[name="url"]:hover {
+#top input[name="url"]:hover {
 	border: 2px solid #66b8bc;
 }
 
-section input[type="submit"] {
+#top input[type="submit"] {
 	-webkit-appearance: button;
 	background: #66b8bc;
 	color: #ffffff;
 }
+
+/* result.html */
+#result section{
+	padding: 50px 0;
+}
+
+
+
 /*footer*/
 footer{
 	position:fixed;

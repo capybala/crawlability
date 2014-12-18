@@ -1,7 +1,5 @@
 {% extends "_layout.html" %}
-
 {% block title %}Crawlability of {{ c.page.url }}{% endblock %}
-
 {% macro render_page_items(page) %}
 	<li>URL: <a href="{{ page.url }}" rel="nofollow">{{ page.url }}</a>
 	<li>Status: <span class="status {% if page.ok %}ok{% endif %}">{{ page.status }}</span></li>
@@ -16,47 +14,49 @@
 {% endmacro %}
 
 {% block content %}
-
-<h1>Crawlability of {{ c.page.url }}</h1>
+<section id="result">
+<h2>Crawlability of {{ c.page.url }}</h2>
 
 <p>Checked at {{ c.page.started_at.strftime('%Y-%m-%d %H:%M:%S %Z') }}, by User-Agent: {{ c.page.user_agent }}</p>
 
-<h2>Page</h2>
-<ul>
-	{{ render_page_items(c.page) }}
-</ul>
-
-<h2>Top Page</h2>
-<ul>
-	{{ render_page_items(c.top_page) }}
-</ul>
-
-<h2>robots.txt</h2>
-<ul>
-	{{ render_page_items(c.robots_txt) }}
-	<li>Content:
-		<pre><code>{{ c.robots_txt.text_body|urlize(nofollow=True) }}</code></pre>
-	</li>
-</ul>
-
-<h2>Fuzzy Sitemaps</h2>
-<ul>
-	{% for sitemap in c.fuzzy_sitemaps %}
-	<li>
-		<ul>
-			{{ render_page_items(sitemap) }}
-		</ul>
-	</li>
-	{% endfor %}
-</ul>
-
-<h2>Terms</h2>
-<ul>
-	{% if c.terms_page %}
-	{{ render_page_items(c.terms_page) }}
-	{% else %}
-	<li>No terms found</li>
-	{% endif %}
-</ul>
-
+<section>
+	<h3>Page</h3>
+	<ul>
+		{{ render_page_items(c.page) }}
+	</ul>
+	
+	<h3>Top Page</h3>
+	<ul>
+		{{ render_page_items(c.top_page) }}
+	</ul>
+	
+	<h3>robots.txt</h3>
+	<ul>
+		{{ render_page_items(c.robots_txt) }}
+		<li>Content:
+			<pre><code>{{ c.robots_txt.text_body|urlize(nofollow=True) }}</code></pre>
+		</li>
+	</ul>
+	
+	<h3>Fuzzy Sitemaps</h3>
+	<ul>
+		{% for sitemap in c.fuzzy_sitemaps %}
+		<li>
+			<ul>
+				{{ render_page_items(sitemap) }}
+			</ul>
+		</li>
+		{% endfor %}
+	</ul>
+	
+	<h3>Terms</h3>
+	<ul>
+		{% if c.terms_page %}
+		{{ render_page_items(c.terms_page) }}
+		{% else %}
+		<li>No terms found</li>
+		{% endif %}
+	</ul>
+</section>
+</section>
 {% endblock %}

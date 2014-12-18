@@ -1,7 +1,9 @@
 {% extends "_layout.html" %}
 
 {% block content %}
+<section id="top">
 	<form method="GET" action="/result">
 		<input type="url" name="url" value="http://www.yahoo.com/" required> <input type="submit" value="Check">
 	</form>
+</section>
 {% endblock %}
