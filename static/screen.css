@@ -18,10 +18,11 @@ header h1{
 
 /*section*/
 section {
-	min-height:700px;
+	min-height:500px;
 	padding: 100px 0;
 	text-align: center;
-	background: url(images/header.jpg) no-repeat top center;
+	background-image: url(images/header.jpg) repeat-x top center;
+	background-size: 50% 50%;
 }
 
 section input {
