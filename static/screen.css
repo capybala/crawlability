@@ -62,6 +62,9 @@ section {
 	color: #ffffff;
 	border: none;
 }
+#top input[type="submit"]:hover {
+	background: #77c9cd;
+}
 
 /* result.html */
 #result{
