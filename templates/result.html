@@ -2,7 +2,7 @@
 
 {% macro render_page_items(page) %}
 	<li>URL: <a href="{{ page.url }}" rel="nofollow">{{ page.url }}</a>
-	<li>Status: {{ page.status }}</li>
+	<li>Status: <span class="status {% if page.ok %}ok{% endif %}">{{ page.status }}</span></li>
 	{% if page.ok %}
 	<li>Content-Type: {{ page.content_type }}</li>
 	<li>Size: {{ page.length|filesizeformat }}</li>
