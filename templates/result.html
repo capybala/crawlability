@@ -15,10 +15,10 @@
 
 {% block content %}
 <section id="result">
-<h2>Crawlability of {{ c.page.url }}</h2>
-
-<p>Checked at {{ c.page.started_at.strftime('%Y-%m-%d %H:%M:%S %Z') }}, by User-Agent: {{ c.page.user_agent }}</p>
-
+<div class="info">
+	<h2>Crawlability of {{ c.page.url }}</h2>
+	<p>Checked at {{ c.page.started_at.strftime('%Y-%m-%d %H:%M:%S %Z') }}, by User-Agent: {{ c.page.user_agent }}</p>
+</div>
 <article>
 	<h3>Page</h3>
 	<ul>
