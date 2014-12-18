@@ -136,6 +136,7 @@ def fetch(url):
         text_body=text_body,
         bytes_body=bytes_body,
         content_type=f.headers.get('Content-Type'),
+        ok=(200 <= f.status < 300),
     )
 
 

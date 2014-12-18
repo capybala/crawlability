@@ -1,29 +1,29 @@
 {% extends "_layout.html" %}
 
+{% macro render_page_items(page) %}
+	<li>URL: <a href="{{ page.url }}" rel="nofollow">{{ page.url }}</a>
+	<li>Status: {{ page.status }}</li>
+	{% if page.ok %}
+	<li>Content-Type: {{ page.content_type }}</li>
+	<li>Size: {{ page.length|filesizeformat }}</li>
+	{% endif %}
+{% endmacro %}
+
 {% block content %}
 
 <h2>Page</h2>
 <ul>
-	<li>URL: <a href="{{ c.page.url }}">{{ c.page.url }}</a>
-	<li>Status: {{ c.page.status }}</li>
-	<li>Content-Type: {{ c.page.content_type }}</li>
-	<li>Size: {{ c.page.length|filesizeformat }}</li>
+	{{ render_page_items(c.page) }}
 </ul>
 
 <h2>Top Page</h2>
 <ul>
-	<li>URL: <a href="{{ c.top_page.url }}">{{ c.top_page.url }}</a>
-	<li>Status: {{ c.top_page.status }}</li>
-	<li>Content-Type: {{ c.top_page.content_type }}</li>
-	<li>Size: {{ c.top_page.length|filesizeformat }}</li>
+	{{ render_page_items(c.top_page) }}
 </ul>
 
 <h2>robots.txt</h2>
 <ul>
-	<li>URL: <a href="{{ c.robots_txt.url }}">{{ c.robots_txt.url }}</a>
-	<li>Status: {{ c.robots_txt.status }}</li>
-	<li>Content-Type: {{ c.robots_txt.content_type }}</li>
-	<li>Size: {{ c.robots_txt.length|filesizeformat }}</li>
+	{{ render_page_items(c.robots_txt) }}
 	<li>Content:
 		<pre><code>{{ c.robots_txt.text_body|urlize(nofollow=True) }}</code></pre>
 	</li>
@@ -33,12 +33,9 @@
 <ul>
 	{% for sitemap in c.fuzzy_sitemaps %}
 	<li>
-	<ul>
-		<li>URL: <a href="{{ sitemap.url }}">{{ sitemap.url }}</a>
-		<li>Status: {{ sitemap.status }}</li>
-		<li>Content-Type: {{ sitemap.content_type }}</li>
-		<li>Size: {{ sitemap.length|filesizeformat }}</li>
-	</ul>
+		<ul>
+			{{ render_page_items(sitemap) }}
+		</ul>
 	</li>
 	{% endfor %}
 </ul>
@@ -46,10 +43,7 @@
 <h2>Terms</h2>
 <ul>
 	{% if c.terms_page %}
-	<li>URL: <a href="{{ c.terms_page.url }}">{{ c.terms_page.url }}</a>
-	<li>Status: {{ c.terms_page.status }}</li>
-	<li>Content-Type: {{ c.terms_page.content_type }}</li>
-	<li>Size: {{ c.terms_page.length|filesizeformat }}</li>
+	{{ render_page_items(c.terms_page) }}
 	{% else %}
 	<li>No terms found</li>
 	{% endif %}
