@@ -80,6 +80,17 @@ section {
 	font-family: 'Quicksand', sans-serif;
 	color: #666;
 }
+#result pre{
+	margin: 20px 0;
+	padding: 30px;
+	background-color: rgba(100,100,100,0.5);
+}
+
+#result .ok{
+	color: #66b8bc;
+	font-weight:bold;
+}
+
 
 /*footer*/
 footer{
