@@ -3,7 +3,7 @@ import os
 import re
 import sys
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.error import URLError, HTTPError
 from urllib.request import urlopen
 from urllib.parse import urlparse, urljoin
@@ -124,10 +124,10 @@ def get_fuzzy_sitemaps(c, top_url):
 def fetch(url):
     logger.info('Downloading %s', url)
 
-    begin = datetime.now()
+    begin = datetime.now(timezone.utc)
     f = yield from aiohttp.request('GET', url)
     bytes_body = yield from f.read()
-    end = datetime.now()
+    end = datetime.now(timezone.utc)
     elapsed_ms = (end - begin).total_seconds() * 1000
 
     logger.info('Downloaded. code: %s, type: %s, size: %sbytes, in %s milliseconds',
@@ -143,6 +143,7 @@ def fetch(url):
         bytes_body=bytes_body,
         content_type=f.headers.get('Content-Type'),
         ok=(200 <= f.status < 300),
+        started_at=begin,
         elapsed_ms=elapsed_ms,
     )
 
